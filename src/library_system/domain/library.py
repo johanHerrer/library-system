@@ -39,3 +39,22 @@ class Library:
         if book.is_borrowed:
                     raise BookCantNotBeRemovedError("Cannot remove a borrowed book")
         self._books.remove(book)
+
+
+    def get_stats(self) -> dict:
+        count_books_borrowed = 0
+        count_books_availables = 0
+        list_books_is_borrowed = []
+        for book in self._books:
+            if book.is_borrowed:
+                count_books_borrowed += 1
+                list_books_is_borrowed.append(book.title)
+            else:
+                count_books_availables += 1
+        stats = {
+            "borrowed": count_books_borrowed,
+            "available": count_books_availables,
+            "borrowed_titles": list_books_is_borrowed,
+        }
+        return stats
+    

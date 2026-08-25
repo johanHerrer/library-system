@@ -85,3 +85,18 @@ def test_remove_book_that_is_borrowed():
     book.borrow()
     with pytest.raises(BookCantNotBeRemovedError):
         library.remove_book(book) 
+
+
+def test_get_stats_returns_correct_counts_and_titles():
+    library = Library()
+    book1 = Book(title="1984", author="George Orwell", isbn="1234567890")
+    book2 = Book(title="Brave New World", author="Aldous Huxley", isbn="0987654321")
+    library.add_book(book1)
+    library.add_book(book2)
+    book1.borrow()
+
+    stats = library.get_stats()
+
+    assert stats["borrowed"] == 1
+    assert stats["available"] == 1
+    assert stats["borrowed_titles"] == ["1984"]
