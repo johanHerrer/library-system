@@ -10,13 +10,20 @@ class Library:
 
     @property
     def book_count(self) -> int:
+        # Return the number of books in the library's collection
         return len(self._books)
 
     def add_book(self, book: Book) -> None:
+        # Add a book to the library's collection
         self._books.append(book)
 
     def find_by_title(self, title: str) -> Book:
+        # Search for a book by its title in the library's collection
         for book in self._books:
             if book.title == title:
                 return book
         raise BookNotFoundError("No book found")
+
+    def list_available_books(self) -> list[Book]:
+        # Return a list of books that are currently available (not borrowed)
+        return [book for book in self._books if not book.is_borrowed] 
