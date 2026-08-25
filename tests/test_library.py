@@ -1,7 +1,11 @@
 import pytest
 
 from library_system.domain.book import Book
-from library_system.domain.library import BookNotFoundError, Library
+from library_system.domain.library import (
+    BookCantNotBeRemovedError,
+    BookNotFoundError,
+    Library,
+)
 
 
 def test_library_starts_empty():
@@ -37,6 +41,7 @@ def test_find_by_title_not_matching_book():
         library.find_by_title("Nonexistent Book")
 
 def test_list_available_books_excludes_borrowed_books():
+    # Test that listing available books excludes those that are currently borrowed
     library = Library()
     book1 = Book(title="1984", author="George Orwell", isbn="1234567890")
     book2 = Book(title="Brave New World", author="Aldous Huxley", isbn="0987654321")
@@ -49,8 +54,34 @@ def test_list_available_books_excludes_borrowed_books():
     assert book1 not in result 
 
 def test_list_available_books_returns_empty_list_when_empty():
+    # Test that listing available books in an empty library returns an empty list
     library = Library()
 
     result = library.list_available_books()
 
     assert len(result) == 0
+
+
+def test_remove_book_exists_in_library():
+    # Test that a book can be removed from the library's collection
+    library = Library()
+    book = Book(title="1984", author="George Orwell", isbn="1234567890")
+    library.add_book(book)
+    library.remove_book(book)
+    assert book not in library._books 
+
+def test_remove_book_not_exists_in_library():
+    # Test that attempting to remove a book not in the library raises BookNotFoundError
+    library = Library()
+    book = Book(title="1984", author="George Orwell", isbn="1234567890")
+    with pytest.raises(BookNotFoundError):
+        library.remove_book(book)
+
+def test_remove_book_that_is_borrowed():
+    # Test that attempting to remove a borrowed book raises BookCantNotBeRemovedError
+    library = Library()
+    book = Book(title="1984", author="George Orwell", isbn="1234567890")
+    library.add_book(book)
+    book.borrow()
+    with pytest.raises(BookCantNotBeRemovedError):
+        library.remove_book(book) 

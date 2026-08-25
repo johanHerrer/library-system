@@ -4,6 +4,9 @@ from library_system.domain.book import Book
 class BookNotFoundError(Exception):
     """Raised when a book is not found in the library."""
 
+class BookCantNotBeRemovedError(Exception):
+    """Raised when trying to remove a book that is currently borrowed."""
+
 class Library:
     def __init__(self):
         self._books: list[Book] = []
@@ -27,3 +30,12 @@ class Library:
     def list_available_books(self) -> list[Book]:
         # Return a list of books that are currently available (not borrowed)
         return [book for book in self._books if not book.is_borrowed] 
+
+    def remove_book(self, book: Book) -> None:
+        # Remove a book from the library's collection if it is not borrowed
+    
+        if book not in self._books:
+            raise BookNotFoundError("Book not found in the library")
+        if book.is_borrowed:
+                    raise BookCantNotBeRemovedError("Cannot remove a borrowed book")
+        self._books.remove(book)
