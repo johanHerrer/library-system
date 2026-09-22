@@ -88,6 +88,8 @@ def test_remove_book_that_is_borrowed():
 
 
 def test_get_stats_returns_correct_counts_and_titles():
+    # Test that get_stats returns the correct counts of borrowed and available books, along with borrowed titles
+    
     library = Library()
     book1 = Book(title="1984", author="George Orwell", isbn="1234567890")
     book2 = Book(title="Brave New World", author="Aldous Huxley", isbn="0987654321")

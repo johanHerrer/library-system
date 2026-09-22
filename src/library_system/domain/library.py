@@ -42,6 +42,9 @@ class Library:
 
 
     def get_stats(self) -> dict:
+        # Return statistics about the library's collection, 
+        # including counts of borrowed and available books
+        
         count_books_borrowed = 0
         count_books_availables = 0
         list_books_is_borrowed = []
